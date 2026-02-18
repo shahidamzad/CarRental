@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { assets, dummyCarData } from '../assets/assets'
+import Loader from '../components/Loader.jsx'
 
 const CarDetails = () => {
 
     const {id} = useParams()
     const navigate = useNavigate()
     const [car, setCar] = useState(null)
+    const currency = import.meta.env.VITE_CURRENCY
 
     useEffect(
         () => {
@@ -74,7 +76,7 @@ const CarDetails = () => {
                                     ].map((item)=>(
                                         <li key={item} className='flex items-center text-gray-500'>
                                             <img src={assets.check_icon} className='h-4 mr-2' alt="" />
-
+                                             {item}
                                         </li>
                                     ))
                                 }
@@ -85,14 +87,30 @@ const CarDetails = () => {
 
                 </div>
                 {/* right section with booking form */}
-              <form>
+              <form className='shadow-lg h-max sticky top-18 rounded-xl p-6 space-y-6 text-gray-500'>
+                <p className='flex items-center justify-between text-2xl text-gray-800 font-bold'> {currency} {car.pricePerDay} <span className='text-base text-gray-400 font-normal'>
+                    per day</span> </p>
 
+                    <hr  className='border-borderColor my6 '/>
+
+                    <div className='flex flex-col gap-2'>
+                        <label htmlFor="pickup-date" > Pickup Date</label>
+                        <input type="date"  className='border border-borderColor px-3 py-2 rounded-lg ' required id='pickup-date' min={new Date().toISOString().split('T')[0]} />
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <label htmlFor="return-date" > Return  Date</label>
+                        <input type="date"  className='border border-borderColor px-3 py-2 rounded-lg ' required id='return-date'  />
+                    </div>
+
+                    <button className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl'>
+                        Book Now 
+                    </button>
               </form>
 
             </div>
 
         </div>
-    ) : <p>loading.....</p>
+    ) : <Loader />
 }
 
 export default CarDetails

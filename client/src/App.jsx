@@ -9,24 +9,24 @@ import Footer from './components/Footer'
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false)
-  const isOwnerPath =useLocation().pathname.startsWith("/owner")
+  const isOwnerPath = useLocation().pathname.startsWith("/owner")
 
   return (
     <>
-      { !isOwnerPath && <Navbar setShowLogin={setShowLogin}/>}
+      {!isOwnerPath && <Navbar setShowLogin={setShowLogin} />}
 
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/car-details/:id' element={<CarDetails/>} />
-      <Route path='/cars' element={<Cars />} />
-      <Route path='/my-booking' element={<MyBookings />} />
-      
-     
-    </Routes>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/carDetails/:id' element={<CarDetails />} />
+        <Route path='/cars' element={<Cars />} />
+        <Route path='/my-bookings' element={<MyBookings />} />
 
-    {!isOwnerPath && <Footer />}
 
-    
+      </Routes>
+
+      {!isOwnerPath && <Footer />}
+
+
     </>
   )
 }
