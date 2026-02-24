@@ -6,6 +6,14 @@ import CarDetails from './pages/CarDetails'
 import Cars from './pages/Cars'
 import MyBookings from './pages/MyBookings'
 import Footer from './components/Footer'
+import Dashboard from './pages/Owner/Dashboard'
+import ManageBookings from './pages/Owner/ManageBookings'
+import ManageCars from './pages/Owner/ManageCars'
+import AddCar from './pages/Owner/AddCar'
+import Layout from './pages/Owner/Layout'
+
+
+
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false)
@@ -20,6 +28,15 @@ const App = () => {
         <Route path='/carDetails/:id' element={<CarDetails />} />
         <Route path='/cars' element={<Cars />} />
         <Route path='/my-bookings' element={<MyBookings />} />
+
+        <Route path='/owner' element= {<Layout />} >
+          <Route index element={<Dashboard />} />
+          <Route path='Add-car' element={<AddCar />} />
+          <Route path='manage-cars' element={<ManageCars />} />
+          <Route path='manage-bookings' element={<ManageBookings />} />
+        </Route>
+
+
 
 
       </Routes>
