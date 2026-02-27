@@ -11,6 +11,7 @@ import ManageBookings from './pages/Owner/ManageBookings'
 import ManageCars from './pages/Owner/ManageCars'
 import AddCar from './pages/Owner/AddCar'
 import Layout from './pages/Owner/Layout'
+import Login from './components/Login'
 
 
 
@@ -21,6 +22,8 @@ const App = () => {
 
   return (
     <>
+    {showLogin && <Login  setShowLogin ={setShowLogin} /> }
+    
       {!isOwnerPath && <Navbar setShowLogin={setShowLogin} />}
 
       <Routes>
