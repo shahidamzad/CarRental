@@ -41,7 +41,7 @@ export const registerUser = async (req, res) => {
 };
 
 // Login User
-export const loginUser = async (req, res) => {
+export const loginUser = async (req , res) => {
     try {
         const { email, password } = req.body;
 
@@ -67,3 +67,18 @@ export const loginUser = async (req, res) => {
         });
     }
 };
+
+// Get user data using token (jwt)
+
+export const getUserData = async (req , res) =>{
+    try {
+        const {user} = req;
+
+        res.json({success: true , user})
+
+    } catch (error) {
+         return res.status(500).json({
+            message: error.message
+        });
+    }
+}

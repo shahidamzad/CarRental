@@ -14,12 +14,15 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@imagekit/nodejs": "^7.3.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "imagekit": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.2.3"
+    "mongoose": "^9.2.3",
+    "multer": "^2.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
