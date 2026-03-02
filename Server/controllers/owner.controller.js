@@ -25,10 +25,7 @@ export const changeRoleToOwner = async (req, res) => {
     }
 
 }
-
-
 // api to list car
-
 export const addCar = async (req, res) => {
     try {
         const { _id } = req.user;
@@ -72,19 +69,81 @@ export const addCar = async (req, res) => {
 
     }
 }
-
 // api list to get all  owner cars
-
-
-export const getOwnerCars = (req , res ) =>{
+export const getOwnerCars = async (req , res ) =>{
     try {
+        const {_id} = req.user ;
+        const cars = await Car.find({owner : _id})
+        res.json({success : true , cars})  
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });   
+    }
+}
+// api to toggle cars Availability
+export const toggleCarAvailability = async (req , res)=>{
+
+    try {
+        const {_id} = req.user ;
+        const {carId} = req.body;
+        const car = await Car.findById({owner: _id}) 
+
+        // checking car belongs to owner ;
+
+        if(car.owner.toString() !== _id.toString()){
+            return res.json({success : false , message : "unauthorized"})
+        }
+        car.isAvaliable = !car.isAvaliable ;
+        await car.save()
+        res.json({success : true , message : "Availability toggle"})
+    } catch (error) {
+         return res.status(500).json({
+            message: error.message
+        });  
+    }
+}
+
+export const deleteCar = async (req,res)=>{
+    try {
+        const {_id} = req.user ;
+        const {carId} = req.body ;
+        const car = await Car.findById({carId})
+        // checking is car is belong to user 
+
+        if(car.owner.toString() !== _id.toString()){
+            return res.json({success: false , message :"unauthorized"})
+        }
+
+        car.owner = null ; 
+        car.isAvaliable = false;
+        await car.save()
+
+        res.json({success:true , message : "car remove "})
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        }); 
+    }
+}
+
+// api to get dashboard data
+
+export  const getDashboardData = async (req,res)=>{
+    try {
+        const {_id , role} = req.user ; 
+
+        if(role !== role) {
+            return res.json({success : true , message : "Unauthorized"})
+        }
+
+        const cars = await Car.find({owner:_id})
         
         
     } catch (error) {
         return res.status(500).json({
             message: error.message
-        });
-
-        
+        }); 
     }
 }
