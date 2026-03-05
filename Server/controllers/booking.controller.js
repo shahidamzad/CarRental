@@ -3,8 +3,8 @@
 
 // function to check availability of car for a given date
 
-import Booking from "../models/Booking"
-import Car from "../models/Car";
+import Booking from "../models/Booking.js"
+import Car from "../models/Car.js";
 
 export const checkAvailability = async(car , pickupDate , returnDate)=>{
     const bookings = await Booking.find({
@@ -84,7 +84,7 @@ export const createBookings = async(req,res)=>{
 
 // api to list user booking
 
-export const listUserBookings = async(req, res)=>{
+export const getUserBookings = async(req, res)=>{
     try {
         const {_id} = req.user;
 
@@ -108,7 +108,7 @@ export const getOwnerBookings = async(req, res)=>{
             return res.json({success : false , message : "Unauthorized"})
         }
 
-        const bookings = await Booking.find({owner : req.user._id}).populate('car user').select("-user.password").sort(createdAt : -1)
+        const bookings = await Booking.find({owner : req.user._id}).populate('car user').select("-user.password").sort({createdAt : -1})
 
         res.json({success: true , bookings})
         
@@ -119,3 +119,31 @@ export const getOwnerBookings = async(req, res)=>{
     }
 }
 
+ // api to change booking status 
+
+export const changeBookingStatus = async(req, res)=>{
+    try {
+        const {_id} = req.user;
+
+        const {bookingId , status} = req.body ;
+
+        const booking = await Booking.findById(bookingId)
+
+        if(booking.owner.toString() !== _id.toString() ){
+            return res.json({success : false , message : "Unauthorized"})
+        }
+
+        booking.status = status;
+
+        await booking.save();
+
+        res.json({success : true , message : "status updated"})
+
+
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        }); 
+    }
+}
