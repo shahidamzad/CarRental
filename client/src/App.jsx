@@ -12,6 +12,7 @@ import ManageCars from './pages/Owner/ManageCars'
 import AddCar from './pages/Owner/AddCar'
 import Layout from './pages/Owner/Layout'
 import Login from './components/Login'
+import { Toaster } from 'react-hot-toast'
 
 
 
@@ -22,6 +23,7 @@ const App = () => {
 
   return (
     <>
+    <Toaster />
     {showLogin && <Login  setShowLogin ={setShowLogin} /> }
     
       {!isOwnerPath && <Navbar setShowLogin={setShowLogin} />}
