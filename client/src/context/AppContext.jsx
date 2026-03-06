@@ -36,11 +36,48 @@ export const AppProvider = ({ children }) => {
             toast.error(error.message)
         }
     }
+
+    // function to fetch all cars from the server
+
+    const fetchCars = async ()=>{
+        try {
+            const {data }= axios.get('/api/user/cars')
+            data.success ? setCars(data.cars) : toast.error(data.message)
+        } catch (error) {
+            toast.error (error.message)
+        }
+    }
  
+    // function to logout to user 
+
+    const logout = async ()=>{
+        localStorage.removeItem('token')
+        setToken(null)
+        setUser(null)
+        setIsOwner(false)
+        axios.defaults.headers.common['Authorization'] = ''
+        toast.success('you have been log out')
+    }
+
     // useEffect to retrieve the token from localstorage 
-    useEffect()
+    useEffect(()=>{
+        const token = localStorage.getItem('token')
+        setToken(token)
+        fetchCars()
+    },[])
+
+    // useEffect to fetch user data when token is available 
+    useEffect(()=>{
+        if(token){
+            axios.defaults.headers.common['Authorization'] = `${token}`
+            fetchUser()
+        }
+
+    },[token])
+
+    
     const value = {
-        navigate, currency
+        navigate, currency , axios , user , setUser , token , setToken ,isOwner , setIsOwner ,fetchUser , setShowLogin ,showLogin ,logout ,fetchCars , cars , setCars, pickupDate ,setPickupDate, returnDate ,setReturnDate 
 
     }
 

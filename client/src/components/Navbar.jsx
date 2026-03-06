@@ -1,12 +1,30 @@
 import React, { useState } from 'react'
 import { assets, menuLinks } from '../assets/assets'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAppContext } from '../context/AppContext'
+import toast from 'react-hot-toast'
 
-const Navbar = ({setShowLogin}) => {
+const Navbar = () => {
+    const {setShowLogin , user , logout , isOwner , axios , setIsOwner} = useAppContext()
 
     const location = useLocation()
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
+
+    const changeRole = async()=>{
+        try {
+           const {data} = await axios.post('/api/owner/change-role')
+           if(data.success){
+            setIsOwner(true)
+            toast.success(data.message)
+           }else{
+            toast.error(data.message)
+           }
+        } catch (error) {
+            toast.error(error.message)
+            
+        }
+    }
 
 
     return (
@@ -21,13 +39,14 @@ const Navbar = ({setShowLogin}) => {
                     </Link>
                 ))}
                 <div className='hidden lg:flex items-center text-sm gap-2 border border-borderColor px-3 rounded-full max-w-56'>
-                    <input type="text" className='py-1.5 w-full bg-transparent outline-none placeholder:-gray-500 ' placeholder='Search profuct' />
+                    <input type="text" className='py-1.5 w-full bg-transparent outline-none placeholder:-gray-500 ' placeholder='Search product' />
                     <img src={assets.search_icon} alt="Search" />
                 </div>
 
                 <div className='flex max-sm:flex-col items-start sm:items-center gap-6'>
-                    <button onClick={() => navigate("/owner")} className='cursor-pointer'> Dashboard</button>
-                    <button onClick={() => setShowLogin(true)} className='cursor-pointer px-8 py-2 bg-primery hover:bg-primery-dull transition-all text-white rounded-lg'>Login</button>
+                    <button onClick={() => isOwner ? navigate("/owner"): changeRole() } className='cursor-pointer'> { isOwner ?  'Dashboard' : 'list cars'}</button>
+
+                    <button onClick={() => { user ? logout() : setShowLogin(true)}} className='cursor-pointer px-8 py-2 bg-primery hover:bg-primery-dull transition-all text-white rounded-lg'>{user ? 'logout' :'Login'}</button>
                 </div>
             </div>
 

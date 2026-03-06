@@ -1,10 +1,11 @@
 import User from "../models/User.js"
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
+import Car from "../models/Car.js";
 
 // Generate jwt token
-const generateToken = (userId) =>{
-    const payload = userId ;
+const generateToken = (userId) => {
+    const payload = userId;
     return jwt.sign(payload, process.env.JWT_SECRET)
 }
 
@@ -41,7 +42,7 @@ export const registerUser = async (req, res) => {
 };
 
 // Login User
-export const loginUser = async (req , res) => {
+export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -70,15 +71,27 @@ export const loginUser = async (req , res) => {
 
 // Get user data using token (jwt)
 
-export const getUserData = async (req , res) =>{
+export const getUserData = async (req, res) => {
     try {
-        const {user} = req;
+        const { user } = req;
 
-        res.json({success: true , user})
+        res.json({ success: true, user })
 
     } catch (error) {
-         return res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
 }
+
+// get all cars for the frontend 
+
+export const getCars = async (req, res) => {
+    try {
+        const cars = await Car.find({ isAvaliable: true })
+        res.json({ success: true, message: error.message })
+
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+     }
+    }
