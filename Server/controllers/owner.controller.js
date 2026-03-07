@@ -83,53 +83,115 @@ export const getOwnerCars = async (req, res) => {
     }
 }
 // api to toggle cars Availability
-export const toggleCarAvailability = async (req, res) => {
+// export const toggleCarAvailability = async (req, res) => {
 
+//     try {
+//         const { _id } = req.user;
+//         const { carId } = req.body;
+//         const car = await Car.findById({ owner: _id })
+
+//         // checking car belongs to owner ;
+
+//         if (car.owner.toString() !== _id.toString()) {
+//             return res.json({ success: false, message: "unauthorized" })
+//         }
+//         car.isAvaliable = !car.isAvaliable;
+//         await car.save()
+//         res.json({ success: true, message: "Availability toggle" })
+//     } catch (error) {
+//         return res.status(500).json({
+//             message: error.message
+//         });
+//     }
+// }
+
+// export const deleteCar = async (req, res) => {
+//     try {
+//         const { _id } = req.user;
+//         const { carId } = req.body;
+//         const car = await Car.findById({ carId })
+//         // checking is car is belong to user 
+
+//         if (car.owner.toString() !== _id.toString()) {
+//             return res.json({ success: false, message: "unauthorized" })
+//         }
+
+//         car.owner = null;
+//         car.isAvaliable = false;
+//         await car.save()
+
+//         res.json({ success: true, message: "car remove " })
+
+//     } catch (error) {
+//         return res.status(500).json({
+//             message: error.message
+//         });
+//     }
+// }
+
+// api to get dashboard data
+
+// ==========================================
+// toggleCarAvailability 
+// ==========================================
+export const toggleCarAvailability = async (req, res) => {
     try {
         const { _id } = req.user;
         const { carId } = req.body;
-        const car = await Car.findById({ owner: _id })
 
-        // checking car belongs to owner ;
+       
+        const car = await Car.findById(carId)
 
-        if (car.owner.toString() !== _id.toString()) {
-            return res.json({ success: false, message: "unauthorized" })
+        if (!car) {
+            return res.json({ success: false, message: "Car not found" })
         }
+
+        
+        if (car.owner.toString() !== _id.toString()) {
+            return res.json({ success: false, message: "Unauthorized" })
+        }
+
         car.isAvaliable = !car.isAvaliable;
         await car.save()
-        res.json({ success: true, message: "Availability toggle" })
+
+        res.json({ success: true, message: "Availability toggled" })
+
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+        return res.status(500).json({ success: false, message: error.message });
     }
 }
 
+// ==========================================
+// deleteCar - 
+// ==========================================
 export const deleteCar = async (req, res) => {
     try {
         const { _id } = req.user;
         const { carId } = req.body;
-        const car = await Car.findById({ carId })
-        // checking is car is belong to user 
 
-        if (car.owner.toString() !== _id.toString()) {
-            return res.json({ success: false, message: "unauthorized" })
+       
+        
+        const car = await Car.findById(carId)
+
+        if (!car) {
+            return res.json({ success: false, message: "Car not found" })
         }
 
-        car.owner = null;
-        car.isAvaliable = false;
-        await car.save()
+        if (car.owner.toString() !== _id.toString()) {
+            return res.json({ success: false, message: "Unauthorized" })
+        }
 
-        res.json({ success: true, message: "car remove " })
+        
+        await Car.findByIdAndDelete(carId)
+
+        res.json({ success: true, message: "Car deleted successfully" })
 
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+        return res.status(500).json({ success: false, message: error.message });
     }
 }
 
-// api to get dashboard data
+
 
 export const getDashboardData = async (req, res) => {
     try {
