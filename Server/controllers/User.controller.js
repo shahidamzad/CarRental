@@ -89,7 +89,7 @@ export const getUserData = async (req, res) => {
 export const getCars = async (req, res) => {
     try {
         const cars = await Car.find({ isAvaliable: true })
-        res.json({ success: true, message: error.message })
+        res.json({ success: true, cars })
 
     } catch (error) {
         return res.status(500).json({message: error.message})

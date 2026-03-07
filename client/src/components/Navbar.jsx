@@ -5,24 +5,24 @@ import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
 
 const Navbar = () => {
-    const {setShowLogin , user , logout , isOwner , axios , setIsOwner} = useAppContext()
+    const { setShowLogin, user, logout, isOwner, axios, setIsOwner } = useAppContext()
 
     const location = useLocation()
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
 
-    const changeRole = async()=>{
+    const changeRole = async () => {
         try {
-           const {data} = await axios.post('/api/owner/change-role')
-           if(data.success){
-            setIsOwner(true)
-            toast.success(data.message)
-           }else{
-            toast.error(data.message)
-           }
+            const { data } = await axios.post('/api/owner/change-role')
+            if (data.success) {
+                setIsOwner(true)
+                toast.success(data.message)
+            } else {
+                toast.error(data.message)
+            }
         } catch (error) {
             toast.error(error.message)
-            
+
         }
     }
 
@@ -44,9 +44,10 @@ const Navbar = () => {
                 </div>
 
                 <div className='flex max-sm:flex-col items-start sm:items-center gap-6'>
-                    <button onClick={() => isOwner ? navigate("/owner"): changeRole() } className='cursor-pointer'> { isOwner ?  'Dashboard' : 'list cars'}</button>
+                    <button onClick={() => isOwner ? navigate("/owner") : changeRole()} className='cursor-pointer'> {isOwner ? 'Dashboard' : 'list cars'}</button>
 
-                    <button onClick={() => { user ? logout() : setShowLogin(true)}} className='cursor-pointer px-8 py-2 bg-primery hover:bg-primery-dull transition-all text-white rounded-lg'>{user ? 'logout' :'Login'}</button>
+                    <button onClick={() => { user ? logout() : setShowLogin(true) }} className='cursor-pointer px-8 py-2 bg-primery hover:bg-primery-dull transition-all text-white rounded-lg'>
+                        {user ? 'logout' : 'Login'}</button>
                 </div>
             </div>
 
@@ -54,7 +55,7 @@ const Navbar = () => {
                 <img src={open ? assets.close_icon : assets.menu_icon} alt="Menu" />
             </button>
 
-           
+
 
         </div>
     )

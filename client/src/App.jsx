@@ -19,15 +19,16 @@ import { useAppContext } from './context/AppContext'
 
 
 const App = () => {
-  const {showLogin} = useAppContext()
+
+  const { showLogin } = useAppContext()
   const isOwnerPath = useLocation().pathname.startsWith("/owner")
 
   return (
     <>
     <Toaster />
-    {showLogin && <Login/> }
+    { showLogin && <Login /> }
     
-      {!isOwnerPath && <Navbar/>}
+      {!isOwnerPath && <Navbar />}
 
       <Routes>
         <Route path='/' element={<Home />} />
