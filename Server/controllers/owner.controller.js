@@ -139,14 +139,14 @@ export const toggleCarAvailability = async (req, res) => {
         const { _id } = req.user;
         const { carId } = req.body;
 
-       
+
         const car = await Car.findById(carId)
 
         if (!car) {
             return res.json({ success: false, message: "Car not found" })
         }
 
-        
+
         if (car.owner.toString() !== _id.toString()) {
             return res.json({ success: false, message: "Unauthorized" })
         }
@@ -169,8 +169,8 @@ export const deleteCar = async (req, res) => {
         const { _id } = req.user;
         const { carId } = req.body;
 
-       
-        
+
+
         const car = await Car.findById(carId)
 
         if (!car) {
@@ -181,7 +181,7 @@ export const deleteCar = async (req, res) => {
             return res.json({ success: false, message: "Unauthorized" })
         }
 
-        
+
         await Car.findByIdAndDelete(carId)
 
         res.json({ success: true, message: "Car deleted successfully" })
@@ -197,13 +197,13 @@ export const getDashboardData = async (req, res) => {
     try {
         const { _id, role } = req.user;
 
-        if (role !== role) {
+        if (role !== "owner") {
             return res.json({ success: true, message: "Unauthorized" })
         }
 
         const cars = await Car.find({ owner: _id })
 
-        const bookings = await Booking.find({ owner: _id }).populate('car').sort({ createAt: -1 })
+        const bookings = await Booking.find({ owner: _id }).populate('car').sort({ createdAt: -1 })
 
         const pendingBookings = await Booking.find({ owner: _id, status: "pending" })
 
@@ -248,9 +248,9 @@ export const updateUserImage = async (req, res) => {
             file: fileBuffer,
             fileName: imageFile.originalname,
             folder: "/users"
-        }) 
+        })
 
-         // optimization through URL transformation 
+        // optimization through URL transformation 
 
         var optimizedImageURL = imagekit.url({
             path: response.filePath,
@@ -261,11 +261,11 @@ export const updateUserImage = async (req, res) => {
             ]
         })
 
-        const image = optimizedImageURL ;
+        const image = optimizedImageURL;
 
-        await User.findByIdAndUpdate(_id,{image});
+        await User.findByIdAndUpdate(_id, { image });
 
-        res.json({success:true , message : "Image Updated"})
+        res.json({ success: true, message: "Image Updated" })
 
 
 

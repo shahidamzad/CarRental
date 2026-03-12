@@ -23,7 +23,7 @@ export const checkAvailabilityOfCar = async (req,res)=>{
 
         // fetch all available cars for the given location 
 
-        const cars = await Car.find({location , isAvaliable: true})
+        const cars = await Car.find({location , isAvailable: true})
 
         // check car available for the given date range using promise
 

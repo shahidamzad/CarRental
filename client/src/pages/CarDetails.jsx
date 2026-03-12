@@ -2,18 +2,39 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { assets, dummyCarData } from '../assets/assets'
 import Loader from '../components/Loader.jsx'
+import { useAppContext } from '../context/AppContext.jsx'
+import toast from 'react-hot-toast'
 
 const CarDetails = () => {
 
     const {id} = useParams()
+    const {cars , axios , pickupDate , setPickupDate , returnDate , setReturnDate} = useAppContext()
     const navigate = useNavigate()
     const [car, setCar] = useState(null)
     const currency = import.meta.env.VITE_CURRENCY
 
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        try {
+         const {data} =   await axios.post('/api/bookings/create', {car:id , pickupDate,returnDate})
+
+         if(data.success){
+            toast.success(data.message)
+            navigate('/my-bookings')
+         }else{
+            toast.error(data.message)
+         }
+
+        } catch (error) {
+            toast.error(error.message)
+            
+        }
+    }
+
     useEffect(
         () => {
-            setCar(dummyCarData.find(car => car._id === id))
-        }, [id]
+            setCar(cars.find(car => car._id === id))
+        }, [cars,id]
     )
 
 
@@ -87,24 +108,24 @@ const CarDetails = () => {
 
                 </div>
                 {/* right section with booking form */}
-              <form className='shadow-lg h-max sticky top-18 rounded-xl p-6 space-y-6 text-gray-500'>
+              <form  onSubmit={handleSubmit} className='shadow-lg h-max sticky top-18 rounded-xl p-6 space-y-6 text-gray-500'>
                 <p className='flex items-center justify-between text-2xl text-gray-800 font-bold'> {currency} {car.pricePerDay} <span className='text-base text-gray-400 font-normal'>
                     per day</span> </p>
 
-                    <hr  className='border-borderColor my6 '/>
+                    <hr  className='border-borderColor my-6 '/>
 
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="pickup-date" > Pickup Date</label>
-                        <input type="date"  className='border border-borderColor px-3 py-2 rounded-lg ' required id='pickup-date' min={new Date().toISOString().split('T')[0]} />
+                        <input value={pickupDate} onChange={(e)=>setPickupDate(e.target.value)} type="date"  className='border border-borderColor px-3 py-2 rounded-lg ' required id='pickup-date' min={new Date().toISOString().split('T')[0]} />
                     </div>
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="return-date" > Return  Date</label>
-                        <input type="date"  className='border border-borderColor px-3 py-2 rounded-lg ' required id='return-date'  />
+                        <input value={returnDate} onChange={(e)=>setReturnDate(e.target.value)} type="date"  className='border border-borderColor px-3 py-2 rounded-lg ' required id='return-date'  />
                     </div>
 
-                    <button className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl'>
-                        Book Now 
-                    </button>
+                    <button className='w-full bg-primery hover:bg-primery-dull transition-all py-3 font-medium text-white rounded-xl'>Book Now  </button>
+
+                    <p className=' text-center text-sm'> No credit card required to reserve </p>
               </form>
 
             </div>

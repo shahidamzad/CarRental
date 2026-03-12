@@ -1,5 +1,5 @@
 import express from 'express'
-import { changeBookingStatus, checkAvailability, createBookings, getOwnerBookings, getUserBookings } from '../controllers/booking.controller.js';
+import { changeBookingStatus, checkAvailability, checkAvailabilityOfCar, createBookings, getOwnerBookings, getUserBookings } from '../controllers/booking.controller.js';
 import  {protect}  from '../middleware/auth.js'
 
 

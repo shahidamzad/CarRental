@@ -3,7 +3,7 @@ import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 
 const CarCard = ({ car }) => {
-    const curency = import.meta.env.VITE_CURRENCY || '$'
+    const currency = import.meta.env.VITE_CURRENCY || '$'
     const navigate = useNavigate()
     return (
         <div onClick={()=>{
@@ -17,7 +17,7 @@ const CarCard = ({ car }) => {
 
                 <div className='absolute bottom-4 right-4 bg-black/80 backdrop-blur-sm text-white px-3 py-2 rounded-lg'>
 
-                    <span className='font-semibold '>{curency}{car.pricePerDay}</span>
+                    <span className='font-semibold '>{currency}{car.pricePerDay}</span>
                     <span className='text-sm text-white/80'> / day</span>
                 </div>
             </div>
