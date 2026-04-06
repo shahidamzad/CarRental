@@ -1,7 +1,7 @@
 import User from "../models/User.js"
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
-import Car from "../models/Car.js";
+import Car from "../models/Car.model.js";
 
 // Generate jwt token
 const generateToken = (userId) => {
@@ -92,6 +92,6 @@ export const getCars = async (req, res) => {
         res.json({ success: true, cars })
 
     } catch (error) {
-        return res.status(500).json({message: error.message})
-     }
+        return res.status(500).json({ message: error.message })
     }
+}

@@ -7,9 +7,6 @@ import toast from 'react-hot-toast'
 const AddCar = () => {
 
   const { axios, currency } = useAppContext()
-
-
-
   const [image, setImage] = useState(null)
   const [car, setCar] = useState({
     brand: "",
@@ -36,7 +33,7 @@ const AddCar = () => {
       formData.append('image', image)
       formData.append('carData', JSON.stringify(car))
 
-      const { data } = await axios.post('/api/owner/add-car', formData)
+      const { data } = await axios.post('/api/owners/add-car', formData)
       if (data.success) {
         toast.success(data.message)
         setImage(null)

@@ -6,9 +6,6 @@ import toast from 'react-hot-toast';
 
 const Dashboard = () => {
     const {axios , isOwner , currency } = useAppContext()
-
-    
-
     const [data, setData] = useState({
         totalCars: 0,
         totalBookings: 0,
@@ -25,23 +22,25 @@ const Dashboard = () => {
         { title: "Confirmed", value: data.completedBookings, icon: assets.listIconColored },
     ]
 
-    const fetchDashboardData = async ()=>{
+    const fetchDashboardData = async()=>{
         try {
-            const {data } = await axios.get('/api/owner/dashboard')
+            const {data} = await axios.get('/api/owners/dashboards')
             if(data.success){
                 setData(data.dashboardData)
+
             }else{
                 toast.error(data.message)
             }
         } catch (error) {
             toast.error(error.message)
         }
+
     }
+
     useEffect(() => {
         if(isOwner){
             fetchDashboardData()
-        }
-        
+        }   
     }, [isOwner])
 
 
@@ -75,6 +74,7 @@ const Dashboard = () => {
                 <div className='p-4 md:p-6 border border-borderColor rounded-md max-w-lg w-full '>
                     <h1 className='text-lg font-medium'>Recent Bookings</h1>
                     <p className='text-gray-500 '> Latest Customer bookings</p>
+
                     {data.recentBookings.map((booking,index)=>(
                         <div key={index} className='mt-4 flex justify-between'>
                             <div className='flex items-center gap-2'>

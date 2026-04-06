@@ -1,10 +1,8 @@
 
 
-
-// function to check availability of car for a given date
-
 import Booking from "../models/Booking.js"
-import Car from "../models/Car.js";
+import Car from "../models/Car.model.js";
+
 
 export const checkAvailability = async(car , pickupDate , returnDate)=>{
     const bookings = await Booking.find({
@@ -104,46 +102,45 @@ export const getUserBookings = async(req, res)=>{
 
 export const getOwnerBookings = async(req, res)=>{
     try {
-        if(req.user.role !== 'owner' ){
+        if(!req.user || req.user.role !== 'owner'){
             return res.json({success : false , message : "Unauthorized"})
         }
-
-        const bookings = await Booking.find({owner : req.user._id}).populate('car user').select("-user.password").sort({createdAt : -1})
-
-        res.json({success: true , bookings})
+        const bookings  = await Booking.find({owner : req.user._id}).populate('car user' ,'-password' ).sort({createdAt : -1})
         
+        res.json({success : true , bookings})
+
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        }); 
+        console.log(error.message);
+        res.json({success : false , message :error.message})
+        
+        
     }
 }
+
 
  // api to change booking status 
 
 export const changeBookingStatus = async(req, res)=>{
-    try {
-        const {_id} = req.user;
+   try {
+     const {_id} = req.user;
+     const {bookingId , status} = req.body ;
 
-        const {bookingId , status} = req.body ;
+     const booking = await Booking.findById(bookingId)
 
-        const booking = await Booking.findById(bookingId)
+     if(booking.owner.toString() !== _id.toString()){
+        return res.json({success : false , message : "Unauthorized"})
+     }
 
-        if(booking.owner.toString() !== _id.toString() ){
-            return res.json({success : false , message : "Unauthorized"})
-        }
+     booking.status = status ;
 
-        booking.status = status;
+     await booking.save();
 
-        await booking.save();
+     res.json({success : true , message : "Booking status updated"})
 
-        res.json({success : true , message : "status updated"})
-
-
-        
-    } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        }); 
-    }
+   } catch (error) {
+    console.log(error.message);
+    res.json({success : false , message :error.message})
+    
+    
+   }
 }

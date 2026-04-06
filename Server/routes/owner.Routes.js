@@ -12,7 +12,7 @@ ownerRouter.post('/add-car' , upload.single("image"), protect , addCar) ;
 ownerRouter.get('/cars', protect , getOwnerCars);
 ownerRouter.post('/toggle-cars' , protect , toggleCarAvailability);
 ownerRouter.post('/delete-car' , protect , deleteCar);
-ownerRouter.get('/dashboard' ,protect , getDashboardData); 
+ownerRouter.get('/dashboards' ,protect , getDashboardData); 
 ownerRouter.post('/update-image', upload.single("image"),protect ,updateUserImage)
 
 

@@ -4,10 +4,10 @@ import { useAppContext } from '../context/AppContext'
 const Hero = () => {
     const [pickupLocation, setPickupLocation] = useState('')
     const { pickupDate, setPickupDate, returnDate, setReturnDate, navigate } = useAppContext()
+    
     const handleSearch = (e) => {
         e.preventDefault()
-        navigate('/cars?pickupLocation=' + pickupLocation + '&pickupDate=' + pickupDate + '&returnDate' + returnDate)
-
+        navigate('/cars?pickupLocation=' + pickupLocation + '&pickupDate=' + pickupDate + '&returnDate=' + returnDate)
     }
 
     return (

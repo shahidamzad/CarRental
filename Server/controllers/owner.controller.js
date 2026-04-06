@@ -3,7 +3,7 @@ import User from "../models/User.js";
 
 import fs from 'fs'
 import { imagekit } from "../configs/imageKit.js";
-import Car from "../models/Car.js";
+import Car from "../models/Car.model.js";
 import Booking from "../models/Booking.js";
 
 
@@ -82,75 +82,19 @@ export const getOwnerCars = async (req, res) => {
         });
     }
 }
-// api to toggle cars Availability
-// export const toggleCarAvailability = async (req, res) => {
 
-//     try {
-//         const { _id } = req.user;
-//         const { carId } = req.body;
-//         const car = await Car.findById({ owner: _id })
-
-//         // checking car belongs to owner ;
-
-//         if (car.owner.toString() !== _id.toString()) {
-//             return res.json({ success: false, message: "unauthorized" })
-//         }
-//         car.isAvaliable = !car.isAvaliable;
-//         await car.save()
-//         res.json({ success: true, message: "Availability toggle" })
-//     } catch (error) {
-//         return res.status(500).json({
-//             message: error.message
-//         });
-//     }
-// }
-
-// export const deleteCar = async (req, res) => {
-//     try {
-//         const { _id } = req.user;
-//         const { carId } = req.body;
-//         const car = await Car.findById({ carId })
-//         // checking is car is belong to user 
-
-//         if (car.owner.toString() !== _id.toString()) {
-//             return res.json({ success: false, message: "unauthorized" })
-//         }
-
-//         car.owner = null;
-//         car.isAvaliable = false;
-//         await car.save()
-
-//         res.json({ success: true, message: "car remove " })
-
-//     } catch (error) {
-//         return res.status(500).json({
-//             message: error.message
-//         });
-//     }
-// }
-
-// api to get dashboard data
-
-// ==========================================
-// toggleCarAvailability 
-// ==========================================
 export const toggleCarAvailability = async (req, res) => {
     try {
         const { _id } = req.user;
         const { carId } = req.body;
-
-
         const car = await Car.findById(carId)
 
         if (!car) {
             return res.json({ success: false, message: "Car not found" })
         }
-
-
         if (car.owner.toString() !== _id.toString()) {
             return res.json({ success: false, message: "Unauthorized" })
         }
-
         car.isAvaliable = !car.isAvaliable;
         await car.save()
 
@@ -168,20 +112,15 @@ export const deleteCar = async (req, res) => {
     try {
         const { _id } = req.user;
         const { carId } = req.body;
-
-
-
         const car = await Car.findById(carId)
-
-        if (!car) {
-            return res.json({ success: false, message: "Car not found" })
-        }
 
         if (car.owner.toString() !== _id.toString()) {
             return res.json({ success: false, message: "Unauthorized" })
         }
 
-
+        car.owner = null;
+        car.isAvaliable = false;
+        await car.save()
         await Car.findByIdAndDelete(carId)
 
         res.json({ success: true, message: "Car deleted successfully" })
@@ -191,49 +130,91 @@ export const deleteCar = async (req, res) => {
     }
 }
 
+// api to dashboard data
 
+// export const getDashboardData = async (req, res) => {
+//     try {
+//         const token = req.headers.authorization.split(" ")[1];
+//         if (!token) {
+//             return res.json({ success: false, message: "Unauthorized" })
+//         }
+//         const { _id, role } = req.user;
+//         if (role !== 'owner' ) {
+//             return res.json({ success: false, message: "Unauthorized" })
+//         }
+//         const cars = await Car.find({owner: _id})
+
+//         const bookings = await Booking.find({owner: _id}).populate('car').sort({ createdAt:-1})
+
+//         const pendingBookings = await Booking.find({ owner: _id, status: "pending" })
+
+//         const completeBookings = await Booking.find({ owner: _id, status: "confirmed" })
+
+//         // calculate monthly Revenue from booking where status is confirmed 
+
+//         const monthlyRevenue = bookings.slice().filter(booking => booking.status === 'confirmed').reduce((acc, booking) =>
+//             acc + booking.price, 0
+//         )
+//         const dashboardData = {
+//             totalCars: cars.length,
+//             totalBookings: bookings.length,
+//             pendingBookings: pendingBookings.length,
+//             completeBookings: completeBookings.length,
+//             recentBookings: bookings.slice(0, 3),
+//             monthlyRevenue
+//         }
+
+//         res.json({ success: true, dashboardData })
+
+//     } catch (error) {
+//         return res.status(500).json({
+//             message: error.message
+//         });
+//     }
+// }
 
 export const getDashboardData = async (req, res) => {
     try {
-        const { _id, role } = req.user;
-
-        if (role !== "owner") {
-            return res.json({ success: true, message: "Unauthorized" })
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
         }
 
-        const cars = await Car.find({ owner: _id })
+        const { _id, role } = req.user;
 
-        const bookings = await Booking.find({ owner: _id }).populate('car').sort({ createdAt: -1 })
+        if (role !== 'owner') {
+            return res.status(403).json({ success: false, message: "Forbidden" });
+        }
 
-        const pendingBookings = await Booking.find({ owner: _id, status: "pending" })
+        const cars = await Car.find({ owner: _id });
 
-        const completeBookings = await Booking.find({ owner: _id, status: "confirmed" })
+        const bookings = await Booking.find({ owner: _id })
+            .populate('car')
+            .sort({ createdAt: -1 });
 
-        // calculate monthly Revenue from booking where status is confirmed 
+        const pendingBookings = await Booking.find({ owner: _id, status: "pending" });
 
-        const monthlyRevenue = await bookings.slice().filter(booking => booking.status === 'confirmed').reduce((acc, booking) =>
-            acc + booking.price, 0
-        )
+        const completeBookings = await Booking.find({ owner: _id, status: "confirmed" });
+
+        const monthlyRevenue = bookings
+            .filter(b => b.status === 'confirmed')
+            .reduce((acc, b) => acc + b.price, 0);
+
         const dashboardData = {
             totalCars: cars.length,
             totalBookings: bookings.length,
             pendingBookings: pendingBookings.length,
-            completeBookings: completeBookings.length,
+            completedBookings: completeBookings.length, // ✅ fixed name
             recentBookings: bookings.slice(0, 3),
             monthlyRevenue
+        };
 
-
-        }
-
-        res.json({ success: true, dashboardData })
+        res.json({ success: true, dashboardData });
 
     } catch (error) {
-        return res.status(500).json({
-            message: error.message
-        });
+        console.error(error); // 👈 IMPORTANT
+        res.status(500).json({ success: false, message: error.message });
     }
-}
-
+};
 
 // api to update user image
 
