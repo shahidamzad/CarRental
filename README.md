@@ -1,14 +1,26 @@
 🚗 Car Rental System
 
+
+<img width="1897" height="914" alt="image" src="https://github.com/user-attachments/assets/1ac172fa-baec-464a-aa33-6d7f47ffa671" />
+
+
 A modern web-based Car Rental System that allows users to browse, book, and manage car rentals بسهولة. The platform also provides admin features to manage vehicles, bookings, and users efficiently.
-📌 Features
-🔐 User Authentication (Login/Register)
-🚘 Browse available cars
-📅 Book cars with date selection
-💳 Booking management system
-📊 Admin dashboard (manage cars, users, bookings)
-📱 Responsive UI for all devices
-🔍 Search and filter cars
+
+📌 Features: 
+
+🔐 User Authentication (Login/Register).
+
+🚘 Browse available cars.
+
+📅 Book cars with date selection.
+
+💳 Booking management system.
+
+📊 Admin dashboard (manage cars, users, bookings).
+
+📱 Responsive UI for all devices.
+
+🔍 Search and filter cars.
 
 🛠️ Tech Stack
 
@@ -64,6 +76,8 @@ Admin can:
 Add/Edit/Delete cars
 Manage bookings
 Manage users
+
+
 
 
 👨‍💻 Author
