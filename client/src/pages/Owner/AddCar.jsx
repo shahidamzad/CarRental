@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Title from '../../components/owner/Title.jsx'
+import Title from '../../components/Owner/Title.jsx'
 import { assets } from '../../assets/assets.js'
 import { useAppContext } from '../../context/AppContext.jsx'
 import toast from 'react-hot-toast'
