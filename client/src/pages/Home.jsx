@@ -1,20 +1,18 @@
 import React from 'react'
-import Hero from '../components/Hero'
-import FeaturedSection from '../components/FeaturedSection'
-import Banner from '../components/Banner'
-import Testimonial from '../components/Testimonial'
-import Newslatter from '../components/Newslatter'
+import Hero from '../components/Hero.jsx'
+import FeaturedSection from '../components/FeaturedSection.jsx'
+import Banner from '../components/Banner.jsx'
+import Testimonial from '../components/Testimonial.jsx'
+import Newsletter from '../components/Newslatter.jsx'
 
 const Home = () => {
-
-
   return (
     <>
-    <Hero /> 
-    <FeaturedSection />
-    <Banner />
-    <Testimonial />
-    <Newslatter />
+      <Hero />
+      <FeaturedSection />
+      <Banner />
+      <Testimonial />
+      <Newsletter />
     </>
   )
 }
