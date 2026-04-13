@@ -1,4 +1,5 @@
 import ImageKit from "@imagekit/nodejs"; 
+import { ImageKit } from "imagekit";
 
 var imagekit = new ImageKit({
     publicKey : process.env.IMAGEKIT_PUBLIC_KEY,

@@ -13,7 +13,10 @@ const app = express()
 await connectDB()
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    Credentials: true
+}));
 app.use(express.json());
 
 app.get('/', (req, res)=> res.send("Server is running"))
