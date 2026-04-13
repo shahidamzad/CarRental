@@ -1,5 +1,5 @@
 
-import { ImageKit } from "imagekit";
+import  ImageKit  from "imagekit";
 
 var imagekit = new ImageKit({
     publicKey : process.env.IMAGEKIT_PUBLIC_KEY,
